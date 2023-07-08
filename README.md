@@ -2,7 +2,9 @@
 
 SATT es una herramienta que automatiza el proceso de traducción de los archivos de texto del juego Stalker Anomaly.
 
-El software esta pensado para poder  traducir tanto los ficheros base como los mods que se le añadan.
+El software esta pensado para poder traducir tanto los ficheros base como los mods que se le añadan. Para ello se utiliza la API de OpenAI para traducir los textos y Directus como Baas (Backend as a Service) para poder almacenar los datos de los ficheros de texto y poder traducirlos.
+
+Es posible traducir a varios idiomas 😁
 
 ## Tabla de contenido
 
