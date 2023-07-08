@@ -96,6 +96,34 @@ export class Database {
         }
     }
 
+    async getId(filename: string, key: string) {
+        try {
+            const result = await this.directus.items('Translations').readByQuery({
+                fields: ['id'],
+                filter: {
+                    key: {
+                        _eq: key,
+                    },
+                    filename: {
+                        _eq: filename,
+                    },
+                },
+            })
+
+            if (result.data && result.data.length > 0) {
+                const item = result.data[0]
+                console.log(chalk.blue(`[DB] Getting stored translation: ${key}`))
+
+                return item.id
+            }
+
+            return false
+        } catch (error) {
+            console.error(error)
+            return false
+        }
+    }
+
     async create(filename: string, key: string, value_en: string, value_es: string) {
         try {
             console.log(chalk.green(`[DB] Creating translation: ${key}`))
@@ -106,6 +134,26 @@ export class Database {
                 value_en: value_en
                     .replace(new RegExp('пїЅ', 'g'), '-')
                     .replace(/[^\x00-\x7F]/g, ''),
+                value_es: value_es
+                    .replace(new RegExp('пїЅ', 'g'), '-')
+                    .replace(/[^\x00-\x7F]/g, ''),
+            })
+
+            return true
+        } catch (error) {
+            console.error(error)
+            this.errors++
+            return false
+        }
+    }
+
+    async update(id: ID, filename: string, key: string, value_es: string) {
+        try {
+            console.log(chalk.green(`[DB] Creating translation: ${key}`))
+
+            await this.directus.items('Translations').updateOne(id, {
+                filename: filename,
+                key: key,
                 value_es: value_es
                     .replace(new RegExp('пїЅ', 'g'), '-')
                     .replace(/[^\x00-\x7F]/g, ''),

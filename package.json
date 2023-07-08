@@ -8,6 +8,7 @@
         "translate": "ts-node --esm src/translate_base.ts",
         "translate:mods": "ts-node --esm src/translate_mods.ts",
         "copy:mods": "ts-node --esm src/copy_mods.ts",
+        "overwrite": "ts-node --esm src/overwrite.ts",
         "build": "ts-node --esm src/build.ts"
     },
     "keywords": [],

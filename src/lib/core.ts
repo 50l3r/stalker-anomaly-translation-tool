@@ -83,6 +83,70 @@ export class EFPCore {
         }
     }
 
+    async overwrite() {
+        const __filename = fileURLToPath(import.meta.url)
+        const __dirname = path.dirname(__filename)
+
+        console.log('Scanning translation files...')
+
+        let xmlFiles = await glob(`src/data/gamma/*.xml`)
+
+        if (xmlFiles.length > 0) {
+            const db = new Database()
+            const chatgpt = new ChatGPT()
+
+            for (let i = 0; i < xmlFiles.length; i++) {
+                const file = xmlFiles[i]
+                const filename = path.basename(file)
+
+                if (this.blacklist.includes(filename)) {
+                    continue
+                }
+
+                // Read original xml file
+                const xml = new EFPXML(__dirname + '/../../' + file)
+                const json = xml.read()
+
+                // Get root element and consume it
+
+                const elements = json.elements.find(
+                    (element: any) => element.name === 'string_table'
+                ).elements
+
+                for (let index = 0; index < elements.length; index++) {
+                    const id = elements[index].attributes ? elements[index].attributes.id : null
+
+                    if (id) {
+                        const text = elements[index].elements[0].elements
+                            ? elements[index].elements[0].elements[0].text
+                            : ' '
+
+                        console.log('texto', text)
+                        const dbId = await db.getId(filename, id)
+
+                        console.log(dbId, filename, id, text)
+                        process.exit()
+                        // if (text && dbId) {
+                        //     await db.update(dbId, filename, id, text)
+                        // }
+
+                        // if (dbTranslation) {
+                        //     finalText = dbTranslation
+                        // } else {
+                        //     finalText = await chatgpt.translate(id, text)
+
+                        //     if (finalText) {
+                        //         await db.create(filename, id, text, finalText)
+                        //     }
+                        // }
+                    }
+                }
+            }
+
+            console.log(chalk.green('[DONE] Errors:' + db.errors))
+        }
+    }
+
     async build() {
         const __filename = fileURLToPath(import.meta.url)
         const __dirname = path.dirname(__filename)

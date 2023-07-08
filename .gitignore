@@ -3,3 +3,4 @@ node_modules
 src/data/eng/base/*.xml
 src/data/eng/mods/*/*.xml
 src/data/spa/*.xml
+src/data/gamma
