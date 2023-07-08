@@ -1,0 +1,5 @@
+node_modules
+.env
+src/data/eng/base/*.xml
+src/data/eng/mods/*/*.xml
+src/data/spa/*.xml

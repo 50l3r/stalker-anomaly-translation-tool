@@ -1,0 +1,32 @@
+{
+    "type": "module",
+    "name": "stalker-anomaly-translation-tool",
+    "version": "0.1.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "translate": "ts-node --esm src/translate_base.ts",
+        "translate:mods": "ts-node --esm src/translate_mods.ts",
+        "copy:mods": "ts-node --esm src/copy_mods.ts",
+        "build": "ts-node --esm src/build.ts"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@directus/sdk": "^10.3.2",
+        "chalk": "^4.1.2",
+        "dotenv": "^16.3.1",
+        "glob": "^10.3.1",
+        "openai": "^3.3.0",
+        "windows-1251": "^3.0.4",
+        "windows-1252": "^3.0.4",
+        "xml-js": "^1.6.11"
+    },
+    "devDependencies": {
+        "@types/node": "^20.3.3",
+        "@types/windows-1251": "^0.1.19",
+        "ts-node": "^10.9.1",
+        "typescript": "^5.1.6"
+    }
+}
