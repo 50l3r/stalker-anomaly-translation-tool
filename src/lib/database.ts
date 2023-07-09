@@ -11,6 +11,7 @@ type Translation = {
     key: string
     value_en: string
     value_es: string
+    status: string
 }
 
 type Collections = {
@@ -147,9 +148,9 @@ export class Database {
         }
     }
 
-    async update(id: ID, filename: string, key: string, value_es: string) {
+    async update(id: ID, filename: string, key: string, value_es: string, status: string) {
         try {
-            console.log(chalk.green(`[DB] Creating translation: ${key}`))
+            console.log(chalk.green(`[DB] Updating translation: ${key}`))
 
             await this.directus.items('Translations').updateOne(id, {
                 filename: filename,
@@ -157,6 +158,7 @@ export class Database {
                 value_es: value_es
                     .replace(new RegExp('пїЅ', 'g'), '-')
                     .replace(/[^\x00-\x7F]/g, ''),
+                status: status,
             })
 
             return true

@@ -24,6 +24,25 @@ export class EFPXML {
         return res
     }
 
+    htmlEntities(encodedString: string) {
+        var translate_re = /&(nbsp|amp|quot|lt|gt);/g
+        var translate: any = {
+            nbsp: ' ',
+            amp: '&',
+            quot: '"',
+            lt: '<',
+            gt: '>',
+        }
+        return encodedString
+            .replace(translate_re, function (match, entity) {
+                return translate[entity]
+            })
+            .replace(/&#(\d+);/gi, function (match, numStr) {
+                var num = parseInt(numStr, 10)
+                return String.fromCharCode(num)
+            })
+    }
+
     write(filename: string, items: Dicc[]) {
         const data: any = {
             _declaration: {
@@ -44,7 +63,7 @@ export class EFPXML {
                     id: translation.key,
                 },
                 text: {
-                    _text: translation.value,
+                    _text: this.htmlEntities(translation.value.replace('&amp;', '&')),
                 },
             }
 

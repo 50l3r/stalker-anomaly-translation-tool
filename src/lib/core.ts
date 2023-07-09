@@ -89,7 +89,7 @@ export class EFPCore {
 
         console.log('Scanning translation files...')
 
-        let xmlFiles = await glob(`src/data/gamma/*.xml`)
+        let xmlFiles = await glob(`src/data/overwrite/*.xml`)
 
         if (xmlFiles.length > 0) {
             const db = new Database()
@@ -124,21 +124,9 @@ export class EFPCore {
                         console.log('texto', text)
                         const dbId = await db.getId(filename, id)
 
-                        console.log(dbId, filename, id, text)
-                        process.exit()
-                        // if (text && dbId) {
-                        //     await db.update(dbId, filename, id, text)
-                        // }
-
-                        // if (dbTranslation) {
-                        //     finalText = dbTranslation
-                        // } else {
-                        //     finalText = await chatgpt.translate(id, text)
-
-                        //     if (finalText) {
-                        //         await db.create(filename, id, text, finalText)
-                        //     }
-                        // }
+                        if (text && dbId) {
+                            await db.update(dbId, filename, id, text, 'approved')
+                        }
                     }
                 }
             }
