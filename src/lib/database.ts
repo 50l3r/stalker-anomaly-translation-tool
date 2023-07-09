@@ -148,16 +148,26 @@ export class Database {
         }
     }
 
-    async update(id: ID, filename: string, key: string, value_es: string, status: string) {
+    async update(
+        id: ID,
+        filename: string,
+        key: string,
+        value_es: string,
+        status: string,
+        replace = true
+    ) {
         try {
             console.log(chalk.green(`[DB] Updating translation: ${key}`))
+
+            let text = value_es
+            if (replace) {
+                text = value_es.replace(new RegExp('пїЅ', 'g'), '-').replace(/[^\x00-\x7F]/g, '')
+            }
 
             await this.directus.items('Translations').updateOne(id, {
                 filename: filename,
                 key: key,
-                value_es: value_es
-                    .replace(new RegExp('пїЅ', 'g'), '-')
-                    .replace(/[^\x00-\x7F]/g, ''),
+                value_es: text,
                 status: status,
             })
 
@@ -182,5 +192,27 @@ export class Database {
         })
 
         await this.directus.items('Translations').deleteMany(duplicates.map((item) => item.id))
+    }
+
+    async findByText(text: string, command: '_starts_with' | '_eq' | '_contains') {
+        try {
+            const result = await this.directus.items('Translations').readByQuery({
+                fields: ['*'],
+                filter: {
+                    value_es: {
+                        [command]: text,
+                    },
+                },
+            })
+
+            if (result.data && result.data.length > 0) {
+                return result.data
+            }
+
+            return false
+        } catch (error) {
+            console.error(error)
+            return false
+        }
     }
 }

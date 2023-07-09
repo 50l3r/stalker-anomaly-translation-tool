@@ -135,6 +135,26 @@ export class EFPCore {
         }
     }
 
+    async replace(
+        original: string,
+        replacement: string,
+        command: '_starts_with' | '_eq' | '_contains' = '_eq'
+    ) {
+        const db = new Database()
+        const items = await db.findByText(original, command)
+
+        if (items) {
+            for (let i = 0; i < items.length; i++) {
+                const item = items[i]
+                const text = item.value_es.replace(original, replacement)
+
+                console.log(chalk.magenta(`Replacing key: ${original} for ${text}`))
+
+                await db.update(item.id, item.filename, item.key, text, item.status, false)
+            }
+        }
+    }
+
     async build() {
         const __filename = fileURLToPath(import.meta.url)
         const __dirname = path.dirname(__filename)

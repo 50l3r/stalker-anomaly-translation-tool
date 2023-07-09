@@ -1,33 +1,33 @@
 # Stalker Anomaly Translation Tool (SATT)
 
-SATT es una herramienta que automatiza el proceso de traducción de los archivos de texto del juego Stalker Anomaly.
+SATT is an automatic translation tool for text files from S.T.A.L.K.E.R. Anomaly mod.
 
-El software esta pensado para poder traducir tanto los ficheros base como los mods que se le añadan. Para ello se utiliza la API de OpenAI para traducir los textos y Directus como Baas (Backend as a Service) para poder almacenar los datos de los ficheros de texto y poder traducirlos.
+The tool can translate base game files and mod files, for this, this tool make uses of OpenAI API and Directus as BaaS (Backend as a Service) to be able to storage the data from the text files and translate.
 
-Es posible traducir a varios idiomas 😁
+It´s possible to translate from other languages 😁
 
-## Tabla de contenido
+## Content
 
-- [Dependencias](#dependencias)
+- [Dependencies](#dependencies)
 - [Directus](#directus)
-- [Instalacíon](#instalacíon)
-- [Uso](#uso)
+- [Installation](#installation)
+- [Use](#use)
 
-## Dependencias
+## Dependencies
 
-Para poder ejecutar correctamente el software es necesario tener instalado lo siguiente:
+You need the following requirements:
 
-- NodeJS: v16 o superior
-- Directus: v9 o superior. [Leer más](https://docs.directus.io/).
-- API de OpenAI: v1.0.0 o superior. [Leer más](https://help.openai.com/en/articles/4936850-where-do-i-find-my-secret-api-key)
+- NodeJS: v16 or later
+- Directus: v9 or later. [Read more](https://docs.directus.io/).
+- OpenAI API: v1.0.0 or later. [Read more](https://help.openai.com/en/articles/4936850-where-do-i-find-my-secret-api-key)
 
 ## Directus
 
-Directus se utiliza como Baas (Backend as a Service) para poder almacenar los datos de los ficheros de texto y poder traducirlos. Para poder utilizarlo es necesario crear un proyecto y configurar la base de datos. Esto se puede hacer en cloud o self-hosted. Para más información leer la [documentación](https://docs.directus.io/).
+Directus is used as BasS (Backend as a Service) to storage data from text files and translate later. You need to create a new project and configure the database, you can do this using a cloud service or self-hosted.[Read more](https://docs.directus.io/)
 
-### Colección
+### Collection
 
-Solo hará falta una colección llamada "Translations" con los siguientes campos:
+You will need a collection called "Translations" with the following fields:
 
 - **id:** integer
 - **user_created:** string
@@ -40,21 +40,23 @@ Solo hará falta una colección llamada "Translations" con los siguientes campos
 - **value_es:** string (required)
 - **status:** enum (Aprobado, Pendiente)
 
-## Instalación
-Para poder instalar todas las dependencias ejecutar el siguiente comando:
+## Installation
+
+To install dependencies:
 
 ```sh
 npm install
 ```
-Una vez instaladas rellena crea tu fichero `.env` con los siguientes datos:
+
+Create the `.env` file with the following:
 
 ```sh
-OPENAI_API_KEY="Api key de OpenAI"
+OPENAI_API_KEY="OpenAI Api key"
 
-DIRECTUS_URL="URL de la API de Directus"
-DIRECTUS_STATIC_TOKEN="Token de la API de Directus"
+DIRECTUS_URL="Directus API URL"
+DIRECTUS_STATIC_TOKEN="Directus API Token"
 
-MODS_FOLDER="Ruta de la carpeta de los mods de MO2"
+MODS_FOLDER="Path to MO2 mod folder"
 
 SOURCE_LANGUAGE_KEY=eng
 SOURCE_LANGUAGE=english
@@ -64,43 +66,43 @@ TARGET_LANGUAGE=spanish
 
 ```
 
-## Uso
+**Note: Source language and target language can be changed based on your preferences, but remember, you must create the folders inside `src/data/`.**
 
-SATT dispone de varios procesos para automatizar la mayoria de lo posible las traducciones. En este proceso entenderemos que se esta realizando una traducción de ingles (eng) a español (spa):
+## Use
 
-### 1. Copiado de ficheros de traduccion de mods
+The following example shows how to use the tool when you need to translate from `English` to `Spanish`.
 
+### 1. XML files from mods
 
 ```sh
 npm run copy:mods
 ```
-Copia todos los ficheros xml de traducción necesarios de la carpeta mods de ModOrganizer2 escecificada en la clave `MODS_FOLDER` del fichero `.env` a `src/data/eng/mods` para su posterior traducción.
 
+Copy the files from MO2 mods folder, defined on `MODS_FOLDER` from `.env` file, to `src/data/eng/mods`
 
-### 2. Traducción base
-
+### 2. Translate base files from game
 
 ```sh
 npm run translate
 ```
-Traduce los ficheros base del juego que deben de estar previamente en la carpeta `src/data/eng/base` y los almacena en la base de datos de Directus
 
-### 3. Traducción de mods
+Translate base files from game, XML files must be on `src/data/eng/base`, and then store translated files on Directus database.
 
+### 3. Translate mods files
 
 ```sh
 npm run translate:mods
 ```
-Traduce los ficheros base del juego que deben de estar en la carpeta `src/data/eng/base` y los almacena en la base de datos de Directus
 
+Translate mods files, XML files must be on `src/data/eng/mods`, and then store translated files on Directus database.
 
 ### 3. Generado de ficheros
-
 
 ```sh
 npm run build
 ```
-Este proceso recoge todas las traducciones desde la base de datos que ya estan traducidas y genera los ficheros de traducción en la carpeta `src/data/spa`
+
+This command merge all translated files stored on database and generate the XML files on `src/data/spa`.
 
 
-
+**Credits to:** Luis Sandoval
